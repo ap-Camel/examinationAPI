@@ -1,7 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
+using exmainationApi.Dtos;
 using exmainationApi.Models;
 using exmainationApi.Services.localDb.Interfaces;
+using exmainationApi.Heplers;
 
 namespace exmainationApi.Services.localDb.Tables {    
 
@@ -14,25 +16,40 @@ namespace exmainationApi.Services.localDb.Tables {
             _db = db;
         }
 
-        public async Task<GeneralUser> verifyUser(string email, string password)
+        public async Task<GeneralUser> verifyUserAsync(string email, string password)
         {
 
-            StringBuilder Sb = new StringBuilder();
+            string hashedPass = await Hashing.hash(password);
 
-            using (SHA256 myHash = SHA256.Create())
-            {
-                Encoding enc = Encoding.UTF8;
-                Byte[] result = await myHash.ComputeHashAsync(new MemoryStream(enc.GetBytes(password)));
-
-                foreach (Byte b in result)
-                {
-                    Sb.Append(b.ToString("x2"));
-                }
-            }
-
-            string sql = $"select top 1 * from generalUser where email = {email} and password = {Sb}";
+            string sql = $"select top 1 * from generalUser where email = '{email}' and userPassword = '{hashedPass}'";
 
             return await _db.LoadSingle<GeneralUser>(sql);
+        }
+
+
+        public async Task<GeneralUser> checkForEmailAsync(string email) {
+            string sql = $"select top 1 * from generalUser where email = '{email}'";
+
+            return await _db.LoadSingle<GeneralUser>(sql);
+        }
+
+
+        public async Task<int> insertUser(UserSignupDto user) {
+            string sql = $"insert into generalUser output inserted.ID values ('{user.firstName}', '{user.lastName}', '{user.userRole}', '{user.email}', default, '{user.email}', '{await Hashing.hash(user.password)}', default, default, null)";
+
+            return await _db.insertDataWithReturn(sql);
+        }
+
+        public async Task<GeneralUser> getUser(string username) {
+            string sql = $"select top 1 * from generalUser where username = '{username}'";
+
+            return await _db.LoadSingle<GeneralUser>(sql);
+        }
+
+        public async Task<bool> deleteUserAsync(int id) {
+            string sql = $"delete from generalUser where ID = {id}";
+
+            return await _db.insertData(sql);
         }
     }
 }

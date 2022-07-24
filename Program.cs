@@ -14,6 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUserData, UserData>();
+builder.Services.AddSingleton<IAnswerData, AnswerData>();
+builder.Services.AddSingleton<IExamData, ExamData>();
+builder.Services.AddSingleton<ITeacherData, TeacherData>();
+builder.Services.AddSingleton<IStudentData, StudentData>();
 
 builder.Services.AddCors(options =>
 {

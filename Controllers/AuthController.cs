@@ -14,29 +14,58 @@ namespace exmainationApi.Controllers {
     public class AuthController : ControllerBase {
         private readonly IUserData userData;
         private readonly IConfiguration config;
+        private readonly ITeacherData teacherData;
+        private readonly IStudentData studentData;
 
-        public AuthController(IUserData userData, IConfiguration config) {
+        public AuthController(IUserData userData, IConfiguration config, ITeacherData teacherData, IStudentData studentData) {
             this.userData = userData;
             this.config = config;
+            this.teacherData = teacherData;
+            this.studentData = studentData;
         }
 
         [HttpPost]
         public async Task<ActionResult<string>> login(UserLoginDto login) {
             
-            var userVerify = await userData.verifyUser(login.email, login.password); 
+            var userVerify = await userData.verifyUserAsync(login.email, login.password); 
 
             if(userVerify is null) {
                 return BadRequest("Invalid credentials");
             }
 
-            return generateToken(userVerify);
+            int specificID = 0;
+            try
+            {
+                switch(userVerify.userRole) {
+                    case "student":
+                        specificID = (await studentData.getStudentByUserIdAsync(userVerify.ID)).ID;
+                    break;
+                    case "teacher":
+                        specificID = (await teacherData.getTeacherByUserIdAsync(userVerify.ID)).ID;
+                    break;
+                    default:
+                        return BadRequest("the specified role does not exist");
+                }
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("something went wrong while retrieving specific user");
+                //throw;
+            }
+
+            if(specificID > 0) {
+                return generateToken(userVerify, specificID);
+            }
+
+            return BadRequest("something went wrong, specific user does not exist");
         }
 
-        private string generateToken(GeneralUser user) {
+        private string generateToken(GeneralUser user, int specificID) {
             List<Claim> claims = new List<Claim> {
                 new Claim(ClaimTypes.Name, user.userName),
                 new Claim(ClaimTypes.Role, user.userRole),
                 new Claim("ID", user.ID.ToString()),
+                new Claim("specificID", specificID.ToString()),
                 new Claim(ClaimTypes.Email, user.email)
             };
 
@@ -46,7 +75,7 @@ namespace exmainationApi.Controllers {
 
             var token = new JwtSecurityToken(
                         claims: claims,
-                        expires: DateTime.UtcNow.AddMinutes(10),
+                        expires: DateTime.UtcNow.AddMinutes(60),
                         signingCredentials: signIn);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

@@ -70,6 +70,25 @@ namespace exmainationApi.Services.localDb {
             }
         }
 
+        public async Task<int> insertDataWithReturn(string sql)
+        {
+
+            string connectionString = _config.GetConnectionString(connectionStringName);
+
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    int id = await connection.ExecuteAsync(sql);
+                    return id;
+                }
+                catch (Exception e)
+                {
+                    return 0;
+                }
+            }
+        }
+
 
     }
 }
