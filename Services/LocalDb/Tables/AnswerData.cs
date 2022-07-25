@@ -21,10 +21,16 @@ namespace exmainationApi.Services.localDb.Tables {
             return await _db.LoadMany<Answer>(sql);
         }
 
-        public async Task<bool> insertAnswerAsync(InsertAnswerDto answer) {
-            string sql = $"insert into answer values ({Convert.ToInt16(answer.correct)}, '{answer.answer}', {answer.difficulty}, default, default, {Convert.ToInt16(answer.active)}, default, default, null, {Convert.ToInt16(answer.hasImage)}, '{answer.imgURL}', {answer.questionID})";
+        public async Task<Answer> getAnswerAsync(int id) {
+            string sql = $"select * from answer where ID = {id}";
 
-            return await _db.insertData(sql);
+            return await _db.LoadSingle<Answer>(sql);
+        }
+
+        public async Task<int> insertAnswerAsync(InsertAnswerDto answer) {
+            string sql = $"insert into answer output inserted.id values ({Convert.ToInt16(answer.correct)}, '{answer.answer}', {answer.difficulty}, default, default, {Convert.ToInt16(answer.active)}, default, default, null, {Convert.ToInt16(answer.hasImage)}, '{answer.imgURL}', {answer.questionID})";
+
+            return await _db.insertDataWithReturn(sql);
         }
     }
 }

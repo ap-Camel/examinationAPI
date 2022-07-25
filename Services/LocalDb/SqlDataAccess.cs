@@ -79,12 +79,32 @@ namespace exmainationApi.Services.localDb {
             {
                 try
                 {
-                    int id = await connection.ExecuteAsync(sql);
+                    int id = await connection.ExecuteScalarAsync<int>(sql);
                     return id;
                 }
                 catch (Exception e)
                 {
                     return 0;
+                }
+            }
+        }
+
+        public async Task<T> insertDataWithObjectReturn<T>(string sql)
+        {
+
+            string connectionString = _config.GetConnectionString(connectionStringName);
+            T? data = default(T);
+
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    data = (T)(await connection.ExecuteScalarAsync(sql));
+                    return data;
+                }
+                catch (Exception e)
+                {
+                    return data;
                 }
             }
         }

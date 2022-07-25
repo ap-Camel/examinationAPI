@@ -5,6 +5,8 @@ namespace exmainationApi.Services.localDb.Interfaces {
     public interface IAnswerData
     {
         Task<IEnumerable<Answer>> getAnswersAsync(int ID);
-        Task<bool> insertAnswerAsync(InsertAnswerDto answer);
+        Task<Answer> getAnswerAsync(int id);
+        Task<int> insertAnswerAsync(InsertAnswerDto answer);
+
     }
 }

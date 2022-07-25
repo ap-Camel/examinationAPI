@@ -1,5 +1,5 @@
 namespace exmainationApi.Dtos.TeacherDtos {
-    public record InsertTeacher {
+    public record InsertTeacherDto {
         public int apiUsageRate {get; init;}
     }
 }

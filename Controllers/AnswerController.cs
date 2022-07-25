@@ -8,7 +8,8 @@ namespace exmainationApi.Controllers {
     
     [ApiController]
     [Route("Answers")]
-    //[Authorize("teacher")]
+    [Authorize(Roles = "teacher")]
+    
     public class AnswerController : ControllerBase {
         private readonly IAnswerData answerData;
 
@@ -17,7 +18,7 @@ namespace exmainationApi.Controllers {
         }
 
 
-        [HttpGet("{id}")]
+        [HttpGet("answers/{id}")]
         public async Task<ActionResult<IEnumerable<Answer>>> getAnswersAsync(int id) {
             var answers = await answerData.getAnswersAsync(id);
 
@@ -27,14 +28,22 @@ namespace exmainationApi.Controllers {
             return Ok(answers);
         }
 
+        [HttpGet("answer/{id}")]
+        public async Task<ActionResult<Answer>> getAnswerAsync(int id) {
+            var answer = await answerData.getAnswerAsync(id);
+
+            if(answer is null)
+                return NotFound("no answer with this id exists");
+
+            return Ok(answer);
+        }
+
         [HttpPost]
-        public async Task<ActionResult<bool>> insertAnswerAsync(InsertAnswerDto answer) {
+        public async Task<ActionResult> insertAnswerAsync(InsertAnswerDto answer) {
 
-            var result = await answerData.insertAnswerAsync(answer);
-
-            //result ? return Ok("answer was added") : return BadRequest("something went wrong, answer was not added");
+            int result = await answerData.insertAnswerAsync(answer);
             
-            return result ? Ok("answer was added") : BadRequest("something went wrong, answer was not added");
+            return result > 0 ? CreatedAtAction(nameof(getAnswersAsync), new {id = result}, answer) : BadRequest("something went wrong, answer was not added");
         }
     }
 }

@@ -5,6 +5,6 @@ namespace exmainationApi.Services.localDb.Interfaces {
     public interface IStudentData
     {
         Task<int> InsertStudentAsync(InsertStudentDto student, int id);
-        Task<Student> getStudentByUserID(int id);
+        Task<Student> getStudentByUserIdAsync(int id);
     }
 }

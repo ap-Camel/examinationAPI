@@ -28,7 +28,7 @@ namespace exmainationApi.Controllers {
 
             int result = await examData.insertExamAsync(exam, userId);
 
-            return result >= 1 ? CreatedAtAction(nameof(getExamAsync), result, exam) : BadRequest("exam was not created, something went wrong");
+            return result >= 1 ? CreatedAtAction(nameof(getExamAsync), new {id = result}, exam) : BadRequest("exam was not created, something went wrong");
         }
 
         [HttpGet("{id}")]
