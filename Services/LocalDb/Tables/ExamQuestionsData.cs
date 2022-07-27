@@ -1,5 +1,6 @@
 using exmainationApi.Dtos.ExamQuestionsDtos;
 using exmainationApi.Models;
+using exmainationApi.Services.localDb.Interfaces;
 
 namespace exmainationApi.Services.localDb.Tables {
 

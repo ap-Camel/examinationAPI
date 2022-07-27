@@ -22,9 +22,9 @@ namespace exmainationApi.Controllers {
         //     return result > 0 ? CreatedAtAction(nameof())
         // }
 
-        public async Task<ActionResult> getExamQuestion(int id) {
-            return Ok();
-        }
+        // public async Task<ActionResult> getExamQuestion(int id) {
+        //     return Ok();
+        // }
 
     }   
 }

@@ -35,6 +35,10 @@ namespace exmainationApi.Controllers {
         [HttpPost]
         public async Task<ActionResult<bool>> signupAsync(UserSignupDto user) {
 
+            if(!(user.userRole == "teacher" || user.userRole == "student")) {
+                return BadRequest($"can not sign up with the role of: {user.userRole}");
+            }
+
             var check = await userData.checkForEmailAsync(user.email);
 
             if(check is not null) {                
@@ -53,12 +57,12 @@ namespace exmainationApi.Controllers {
                     case "teacher":
                         insertedSpecific = await teacherData.insertTeacherAsync(new InsertTeacherDto{ apiUsageRate = 0 }, insertUser);
                     break;                          
-                }
+                    }
                 }
                 catch (System.Exception)
                 {
                     bool deleted = await userData.deleteUserAsync(insertUser);
-                    return BadRequest("something went wrong while inserting in specific user table");
+                    return StatusCode(StatusCodes.Status500InternalServerError);
                     // throw;
                 }
                 
@@ -67,7 +71,7 @@ namespace exmainationApi.Controllers {
                 }
             }
 
-            return BadRequest("something went wrong, user was not created");
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 }

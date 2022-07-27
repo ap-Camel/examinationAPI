@@ -30,7 +30,7 @@ namespace exmainationApi.Controllers {
             var userVerify = await userData.verifyUserAsync(login.email, login.password); 
 
             if(userVerify is null) {
-                return BadRequest("Invalid credentials");
+                return NotFound("Invalid credentials");
             }
 
             int specificID = 0;
@@ -44,20 +44,20 @@ namespace exmainationApi.Controllers {
                         specificID = (await teacherData.getTeacherByUserIdAsync(userVerify.ID)).ID;
                     break;
                     default:
-                        return BadRequest("the specified role does not exist");
+                        return StatusCode(StatusCodes.Status500InternalServerError);
                 }
             }
             catch (System.Exception)
             {
-                return BadRequest("something went wrong while retrieving specific user");
+                return StatusCode(StatusCodes.Status500InternalServerError);
                 //throw;
             }
 
             if(specificID > 0) {
-                return generateToken(userVerify, specificID);
+                return Ok(generateToken(userVerify, specificID));
             }
 
-            return BadRequest("something went wrong, specific user does not exist");
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         private string generateToken(GeneralUser user, int specificID) {
