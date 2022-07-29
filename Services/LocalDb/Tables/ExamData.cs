@@ -12,7 +12,7 @@ namespace exmainationApi.Services.localDb.Tables {
         }
 
         public async Task<int> insertExamAsync(InsertExamDto exam, int id) {
-            string sql = $"insert into Exam output inserted.id values ('{exam.titile}', default, {exam.passRate}, {exam.numOfQuestions}, {exam.duration}, null, {exam.passingValue}, {exam.numOfPoints}, {Convert.ToInt16(exam.active)}, default, default, {id})";
+            string sql = $"insert into Exam output inserted.id values ('{exam.title}', default, default, {exam.numOfQuestions}, {exam.duration}, null, {exam.passingValue}, {exam.numOfPoints}, {Convert.ToInt16(exam.active)}, default, default, {id})";
 
             return await _db.insertDataWithReturn(sql);
         }
@@ -21,6 +21,12 @@ namespace exmainationApi.Services.localDb.Tables {
             string sql = $"select * from Exam where ID = {id}";
 
             return await _db.LoadSingle<Exam>(sql);
+        }
+
+        public async Task<IEnumerable<Exam>> getExamsAsync(int teacherID, int num) {
+            string sql = $"select top {num} * from Exam where teacherID = {teacherID} order by timesUsed asc;";
+
+            return await _db.LoadMany<Exam>(sql);
         }
        
     }

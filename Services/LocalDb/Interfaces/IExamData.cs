@@ -6,5 +6,6 @@ namespace exmainationApi.Services.localDb.Interfaces {
         Task<int> insertExamAsync(InsertExamDto exam, int id);
 
         Task<Exam> getExamAsync(int id);
+        Task<IEnumerable<Exam>> getExamsAsync(int teacherID, int num);
     }
 }

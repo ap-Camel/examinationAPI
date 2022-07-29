@@ -4,6 +4,7 @@ using exmainationApi.Dtos;
 using exmainationApi.Models;
 using exmainationApi.Services.localDb.Interfaces;
 using exmainationApi.Heplers;
+using exmainationApi.Dtos.UserDtos;
 
 namespace exmainationApi.Services.localDb.Tables {    
 

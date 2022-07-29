@@ -1,6 +1,8 @@
 using exmainationApi.Dtos;
 using exmainationApi.Dtos.StudentDtos;
 using exmainationApi.Dtos.TeacherDtos;
+using exmainationApi.Dtos.UserDtos;
+using exmainationApi.Filters;
 using exmainationApi.Models;
 using exmainationApi.Services.localDb.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -33,6 +35,7 @@ namespace exmainationApi.Controllers {
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<ActionResult<bool>> signupAsync(UserSignupDto user) {
 
             if(!(user.userRole == "teacher" || user.userRole == "student")) {

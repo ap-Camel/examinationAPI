@@ -41,3 +41,7 @@ C:\Dev\Cs\learning\examinationAPI\obj\Debug\net6.0\refint\examinationAPI.dll
 C:\Dev\Cs\learning\examinationAPI\obj\Debug\net6.0\examinationAPI.pdb
 C:\Dev\Cs\learning\examinationAPI\obj\Debug\net6.0\examinationAPI.genruntimeconfig.cache
 C:\Dev\Cs\learning\examinationAPI\obj\Debug\net6.0\ref\examinationAPI.dll
+C:\Dev\Cs\learning\examinationAPI\bin\Debug\net6.0\System.Net.Http.Formatting.dll
+C:\Dev\Cs\learning\examinationAPI\bin\Debug\net6.0\System.Web.Http.dll
+C:\Dev\Cs\learning\examinationAPI\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Dev\Cs\learning\examinationAPI\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll

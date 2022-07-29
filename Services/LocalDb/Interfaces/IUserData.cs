@@ -1,4 +1,5 @@
 using exmainationApi.Dtos;
+using exmainationApi.Dtos.UserDtos;
 using exmainationApi.Models;
 
 namespace exmainationApi.Services.localDb.Interfaces {

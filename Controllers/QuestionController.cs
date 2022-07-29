@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using exmainationApi.Dtos.QuestionDtos;
+using exmainationApi.Heplers;
 using exmainationApi.Models;
 using exmainationApi.Services.localDb.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -19,11 +20,7 @@ namespace exmainationApi.Controllers {
         [HttpPost]
         public async Task<ActionResult<string>> insertQuestionAsync(InsertQuestionDto question) {
 
-            string token = HttpContext.Request.Headers["Authorization"];
-            string tokenHash = token.Split(" ")[1];
-
-            var newToken = new JwtSecurityToken(tokenHash);
-            int userId = int.Parse(newToken.Claims.First(x => x.Type == "specificID").Value);
+            int userId = JwtHelpers.getSpecificID(HttpContext.Request.Headers["Authorization"]);
 
             int inserted = await questionData.insertQuestionAsync(question, userId);
 

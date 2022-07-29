@@ -2,6 +2,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using exmainationApi.Dtos;
+using exmainationApi.Dtos.UserDtos;
+using exmainationApi.Heplers;
 using exmainationApi.Models;
 using exmainationApi.Services.localDb.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +27,9 @@ namespace exmainationApi.Controllers {
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> login(UserLoginDto login) {
+        public async Task<ActionResult<UserLoginReturnDto>> login(UserLoginDto login) {
             
-            var userVerify = await userData.verifyUserAsync(login.email, login.password); 
+            var userVerify = await userData.verifyUserAsync(login.email, login.password);
 
             if(userVerify is null) {
                 return NotFound("Invalid credentials");
@@ -54,9 +56,13 @@ namespace exmainationApi.Controllers {
             }
 
             if(specificID > 0) {
-                return Ok(generateToken(userVerify, specificID));
+                UserLoginReturnDto loginReturn = new UserLoginReturnDto {
+                    user = Converting.toUserEssentials(userVerify),
+                    JWT = generateToken(userVerify, specificID)
+                };
+                return Ok(loginReturn);
             }
-
+            
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
 

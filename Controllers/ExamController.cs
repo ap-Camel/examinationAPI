@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using exmainationApi.Dtos.ExamDtos;
+using exmainationApi.Heplers;
 using exmainationApi.Models;
 using exmainationApi.Services.localDb.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,7 @@ namespace exmainationApi.Controllers {
 
     [ApiController]
     [Route("exam")]
-    [Authorize]
+    [Authorize(Roles = "teacher")]
     public class ExamController : ControllerBase {
         private readonly IExamData examData;
 
@@ -31,11 +32,30 @@ namespace exmainationApi.Controllers {
             return result >= 1 ? CreatedAtAction(nameof(getExamAsync), new {id = result}, exam) : BadRequest("exam was not created, something went wrong");
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("examID/{id}")]
         public async Task<ActionResult<Exam>> getExamAsync(int id) {
             Exam exam = await examData.getExamAsync(id);
 
             return exam is not null ? Ok(exam) : BadRequest("this exam does not exist"); 
+        }
+
+        [HttpGet("numberOfExams/{num}")]
+        public async Task<ActionResult<List<ExamEssentialsDto>>> getExamsAsync(int num) {
+
+            int id = JwtHelpers.getSpecificID(HttpContext.Request.Headers["Authorization"]);
+
+            var list = await examData.getExamsAsync(id, num);
+
+            if(list is null) {
+                return NotFound("no exams exist");
+            }
+
+            List<ExamEssentialsDto> newList = new List<ExamEssentialsDto>();
+            foreach(Exam e in list) {
+                newList.Add(Converting.toExamEssentials(e));
+            }
+
+            return newList;
         }
     }
 }
