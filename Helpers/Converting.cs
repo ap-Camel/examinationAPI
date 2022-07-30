@@ -17,13 +17,18 @@ namespace exmainationApi.Heplers {
 
         public static ExamEssentialsDto toExamEssentials(Exam exam) {
             return new ExamEssentialsDto {
+                ID = exam.ID,
+                title = exam.title,
                 timesUsed = exam.timesUsed,
                 passRate = exam.passRate,
                 numOfQuestions = exam.numOfQuestions,
                 duration = exam.duration,
                 passingValue = exam.passingValue,
                 numOfPoints = exam.numOfPoints,
-                active = exam.active
+                active = exam.active,
+                dateCreated = exam.dateCreated,
+                dateUpdated = exam.dateUpdated,
+                dateToOpen = exam.dateToOpen
             };
         }
     }

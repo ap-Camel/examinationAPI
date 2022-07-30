@@ -57,5 +57,20 @@ namespace exmainationApi.Controllers {
 
             return newList;
         }
+
+
+        [HttpPut]
+        public async Task<ActionResult<bool>> updateExamAsync(UpdateExamDto exam) {
+
+            int id = JwtHelpers.getSpecificID(HttpContext.Request.Headers["Authorization"]);
+
+            bool result = await examData.updateExamAsync(exam, id);
+
+            if(result) {
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, "was not able to update the exam");
+        }
     }
 }
