@@ -20,9 +20,9 @@ namespace exmainationApi.Services.localDb.Tables {
             return await _db.LoadSingle<Question>(sql);
         }
 
-        public async Task<IEnumerable<Question>> getQuestionsAsync(int id)
+        public async Task<IEnumerable<Question>> getQuestionsAsync(int num, int id)
         {
-            string sql = $"select * from question where teacherID = {id}";
+            string sql = $"select {(num > 0 ? $"top {num}" : "")} * from question where teacherID = {id}";
 
             return await _db.LoadMany<Question>(sql);
         }

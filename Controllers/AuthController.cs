@@ -62,7 +62,7 @@ namespace exmainationApi.Controllers {
                 };
                 return Ok(loginReturn);
             }
-            
+
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
@@ -81,7 +81,7 @@ namespace exmainationApi.Controllers {
 
             var token = new JwtSecurityToken(
                         claims: claims,
-                        expires: DateTime.UtcNow.AddMinutes(60),
+                        expires: DateTime.UtcNow.AddDays(60),
                         signingCredentials: signIn);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

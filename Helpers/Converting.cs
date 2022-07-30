@@ -1,4 +1,5 @@
 using exmainationApi.Dtos.ExamDtos;
+using exmainationApi.Dtos.QuestionDtos;
 using exmainationApi.Dtos.UserDtos;
 using exmainationApi.Models;
 
@@ -29,6 +30,23 @@ namespace exmainationApi.Heplers {
                 dateCreated = exam.dateCreated,
                 dateUpdated = exam.dateUpdated,
                 dateToOpen = exam.dateToOpen
+            };
+        }
+
+        public static QuestionEssentialsDto toQuestionEssentials(Question q) {
+            return new QuestionEssentialsDto {
+                ID = q.ID,
+                question = q.question,
+                difficulty = q.difficulty,
+                timeUsed = q.timeUsed,
+                timesCorrect = q.timesCorrect,
+                dateCreated = q.dateCreated,
+                dateUpdated = q.dateUpdated,
+                dateUsed = q.dateUsed,
+                questionType = q.questionType,
+                pointValue = q.pointValue,
+                hasImage = q.hasImage,
+                imgURL = q.imgURL
             };
         }
     }

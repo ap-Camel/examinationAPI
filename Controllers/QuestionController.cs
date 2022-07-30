@@ -33,5 +33,24 @@ namespace exmainationApi.Controllers {
 
             return question is not null ? Ok(question) : BadRequest("question does not exist");
         }
+
+
+        [HttpGet("getQuestions/{num}")]
+        public async Task<ActionResult<List<QuestionEssentialsDto>>> getQuestionsDto(int num) {
+            int teacherID = JwtHelpers.getSpecificID(HttpContext.Request.Headers["Authorization"]);
+
+            var list = await questionData.getQuestionsAsync(num, teacherID);
+
+            if(list.Count() == 0) {
+                return NotFound("you dint have any questions");
+            }
+
+            List<QuestionEssentialsDto> temp = new List<QuestionEssentialsDto>();
+            foreach(Question q in list) {
+                temp.Add(Converting.toQuestionEssentials(q));
+            }
+
+            return Ok(temp);
+        }
     }
 }

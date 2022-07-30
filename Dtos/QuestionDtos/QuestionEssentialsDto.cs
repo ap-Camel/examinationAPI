@@ -1,5 +1,5 @@
-namespace exmainationApi.Models {
-    public record Question {
+namespace exmainationApi.Dtos.QuestionDtos {
+    public record QuestionEssentialsDto {
         public int ID {get; init;}
         public string question {get; init;} = string.Empty;
         public int difficulty {get; init;}
@@ -12,6 +12,5 @@ namespace exmainationApi.Models {
         public int pointValue {get; init;}
         public bool hasImage {get; init;}
         public string imgURL {get; init;} = string.Empty;
-        public int teacherID {get; init;}
     }
 }

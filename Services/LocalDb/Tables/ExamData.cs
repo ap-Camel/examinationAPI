@@ -30,7 +30,16 @@ namespace exmainationApi.Services.localDb.Tables {
         }
 
         public async Task<bool> updateExamAsync(UpdateExamDto exam, int id) {
-            string sql = $"UPDATE exam SET title = '{exam.title}', numOfQuestions = {exam.numOfQuestions}, duration = {exam.duration}, dateToOpen = {exam.dateToOpen}, passingValue = {exam.passingValue}, numOfPoints = {exam.numOfPoints}, active = {Convert.ToInt16(exam.active)}, dateUpdated = getdate() WHERE teacherID = {id} and ID = {exam.ID};";
+            // string sql = $"UPDATE exam SET title = '{exam.title}', numOfQuestions = {exam.numOfQuestions}, duration = {exam.duration}, dateToOpen = {(exam.dateToOpen.CompareTo(new DateTime()) < 0 ? "null" : exam.dateToOpen)}, passingValue = {exam.passingValue}, numOfPoints = {exam.numOfPoints}, active = {Convert.ToInt16(exam.active)}, dateUpdated = getdate() WHERE teacherID = {id} and ID = {exam.ID};";
+
+            string sql = $"UPDATE exam SET title = '{exam.title}', numOfQuestions = {exam.numOfQuestions}, duration = {exam.duration}, dateToOpen = null, passingValue = {exam.passingValue}, numOfPoints = {exam.numOfPoints}, active = {Convert.ToInt16(exam.active)}, dateUpdated = getdate() WHERE teacherID = {id} and ID = {exam.ID};";
+
+            return await _db.insertData(sql);
+        }
+
+
+        public async Task<bool> deleteExamAsync(int teacherID, int examID) {
+            string sql = $"delete from exam where ID = {examID} and teacherID = {teacherID}";
 
             return await _db.insertData(sql);
         }

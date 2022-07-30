@@ -64,6 +64,9 @@ namespace exmainationApi.Controllers {
 
             int id = JwtHelpers.getSpecificID(HttpContext.Request.Headers["Authorization"]);
 
+            // var temp = exam.dateToOpen.ToLongDateString();
+            // exam.dateToOpen = exam.dateToOpen.ToUniversalTime();
+
             bool result = await examData.updateExamAsync(exam, id);
 
             if(result) {
@@ -71,6 +74,14 @@ namespace exmainationApi.Controllers {
             }
 
             return StatusCode(StatusCodes.Status500InternalServerError, "was not able to update the exam");
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<bool>> deleteExamAsync(int id) {
+            int teacherID = JwtHelpers.getSpecificID(HttpContext.Request.Headers["Authorization"]);
+
+            return await examData.deleteExamAsync(teacherID, id) ? StatusCode(StatusCodes.Status204NoContent, "deleted succesfuly") : NotFound("no exam was found with specified id");
         }
     }
 }
