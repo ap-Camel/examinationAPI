@@ -8,11 +8,9 @@ namespace exmainationApi.Dtos.ExamDtos {
         // {
         //     dateToOpen = value.ToUniversalTime();
         // }}
-        public DateTime dateToOpen {get; set;}
+        // public DateTime dateToOpen {get; set;}
         public int passingValue {get; init;}
         public int numOfPoints {get; init;}
         public bool active {get; init;}
-
-        public DateTime temp2 = new DateTime().ToUniversalTime();
     }
 }

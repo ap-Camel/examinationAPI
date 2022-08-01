@@ -62,6 +62,10 @@ namespace exmainationApi.Controllers {
         [HttpPut]
         public async Task<ActionResult<bool>> updateExamAsync(UpdateExamDto exam) {
 
+            if(exam.ID == 0) {
+                return BadRequest("no id was specified");
+            }
+
             int id = JwtHelpers.getSpecificID(HttpContext.Request.Headers["Authorization"]);
 
             // var temp = exam.dateToOpen.ToLongDateString();
