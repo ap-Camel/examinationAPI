@@ -33,10 +33,17 @@ namespace exmainationApi.Controllers {
         }
 
         [HttpGet("examID/{id}")]
-        public async Task<ActionResult<Exam>> getExamAsync(int id) {
-            Exam exam = await examData.getExamAsync(id);
+        public async Task<ActionResult<ExamEssentialsDto>> getExamAsync(int id) {
 
-            return exam is not null ? Ok(exam) : BadRequest("this exam does not exist"); 
+            if(id == 0) {
+                return BadRequest("zero is not a valid exam id");
+            }
+
+            int teacherID = JwtHelpers.getSpecificID(HttpContext.Request.Headers["Authorization"]);
+
+            Exam exam = await examData.getExamAsync(id, teacherID);
+
+            return exam is not null ? Ok(Heplers.Converting.toExamEssentials(exam)) : BadRequest("this exam does not exist"); 
         }
 
         [HttpGet("numberOfExams/{num}")]

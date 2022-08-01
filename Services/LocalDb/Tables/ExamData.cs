@@ -17,8 +17,8 @@ namespace exmainationApi.Services.localDb.Tables {
             return await _db.insertDataWithReturn(sql);
         }
 
-        public async Task<Exam> getExamAsync(int id) {
-            string sql = $"select * from Exam where ID = {id}";
+        public async Task<Exam> getExamAsync(int id, int teacherID) {
+            string sql = $"select top 1 * from Exam where ID = {id} and teacherID = {teacherID}";
 
             return await _db.LoadSingle<Exam>(sql);
         }
